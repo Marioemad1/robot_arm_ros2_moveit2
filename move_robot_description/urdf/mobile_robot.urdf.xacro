@@ -1,0 +1,173 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro"  >
+
+    <xacro:property name="base_width"   value="0.4"  />
+    <xacro:property name="base_lenght"  value="0.6"  />
+    <xacro:property name="base_hight"   value="0.2"  />
+    <xacro:property name="wheel_radius" value="0.1"  />
+    <xacro:property name="wheel_lenght" value="0.05" />
+
+
+    <!-- this is the base point in the map  -->
+    <link name="base_footprint">
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+    </link>
+
+    <!--the main body of the mobile robot-->
+    <link name="base_link">
+        <visual>
+            <origin xyz="0 0 ${wheel_radius}" rpy="0 0 0" />
+            <geometry>
+                <box size="${base_lenght} ${base_width} ${base_hight}"/>
+            </geometry>
+            <material name="blue"/>            
+        </visual>
+        <collision>
+            <origin xyz="0 0 ${wheel_radius}" rpy="0 0 0" />
+            <geometry>
+                <box size="${base_lenght} ${base_width} ${base_hight}"/>
+            </geometry>
+        </collision>
+        <xacro:box_inertia  m="5.0" l="${2.0*base_lenght}" w="${2.0*base_width}" h="${2.0*base_hight}"
+                            xyz="0 0 ${wheel_radius}"  rpy="0 0 0"     />
+    </link>
+
+
+
+
+    <link name="right_wheel_link">
+        <visual>
+            <origin xyz="0 0 0" rpy="${pi/2.0} 0 0" />
+            <geometry>
+                <cylinder radius="${wheel_radius}" length="${wheel_lenght}"/>
+            </geometry>
+            <material name="grey"/>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="${pi/2.0} 0 0" />
+            <geometry>
+                <cylinder radius="${wheel_radius}" length="${wheel_lenght}"/>
+            </geometry>
+        </collision>
+        <xacro:cyclinder_inertia r="${2.0*wheel_radius}" l="${2.0*wheel_lenght}" m="2.0"
+                                 xyz="0 0 0" rpy="${pi/2.0} 0 0"  />
+    </link>
+
+    <link name="left_wheel_link">
+        <visual>
+            <origin xyz="0 0 0" rpy="${-pi/2.0} 0 0" />
+            <geometry>
+                <cylinder radius="${wheel_radius}" length="${wheel_lenght}"/>
+            </geometry>
+            <material name="grey"/>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="${-pi/2.0} 0 0" />
+            <geometry>
+                <cylinder radius="${wheel_radius}" length="${wheel_lenght}"/>
+            </geometry>
+        </collision>
+        <xacro:cyclinder_inertia r="${2.0*wheel_radius}" l="${2.0*wheel_lenght}" m="2.0"
+                                 xyz="0 0 0" rpy="${-pi/2.0} 0 0"  />
+    </link>
+
+
+    <link name="caster_wheel_link">
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <sphere radius="${wheel_radius/2.0}"/>
+            </geometry>
+            <material name="grey"/>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <sphere radius="${wheel_radius/2.0}"/>
+            </geometry>
+        </collision>
+        <xacro:sphere_inertia m="2.5" r="${wheel_radius/2.0}"
+                              xyz="0 0 0" rpy="0 0 0"  />
+    </link>
+
+
+    <link name="lidar_link">
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <cylinder radius="${wheel_radius/2.0}" length="${wheel_lenght/2.0}"/>
+            </geometry>
+            <material name="red"/>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <cylinder radius="${wheel_radius/2.0}" length="${wheel_lenght/2.0}"/>
+            </geometry>
+        </collision>
+        <xacro:cyclinder_inertia r="${2.0*wheel_radius}" l="${2.0*wheel_lenght}" m="0.5"
+                                 xyz="0 0 0" rpy="0 0 0"  />
+    </link>
+
+    <link name="camera_link">
+        <visual>
+            <origin xyz="0 0 0" rpy="0 ${pi/2.0} 0" />
+            <geometry>
+                <box size="0.04 0.04 0.01"/>
+            </geometry>
+            <material name="red"/>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <box size="0.04 0.04 0.02"/>
+            </geometry>
+        </collision>
+        <xacro:box_inertia  m="0.05" l="0.04" w="0.04" h="0.02"
+                            xyz="0 0 0"  rpy="0 0 0"     />
+    </link>
+
+
+
+
+    <joint name="blueprint_body_joint" type="fixed">
+        <parent link="base_footprint"/>
+        <child link="base_link"/>
+        <origin xyz="0.0 0.0 ${wheel_radius}" rpy="0.0 0.0 0.0"/>
+    </joint>
+
+    <joint name="base_right_wheel_joint" type="continuous">
+        <parent link="base_link"/>
+        <child link="right_wheel_link"/>
+        <axis xyz="0 1 0"/>
+        <origin xyz="${-base_lenght/4.0} ${(-base_width/2.0)+(-wheel_lenght/2.0)} 0" rpy="0 0 0"/>
+    </joint>
+
+    <joint name="base_left_wheel_joint" type="continuous">
+        <parent link="base_link"/>
+        <child link="left_wheel_link"/>
+        <axis xyz="0 1 0"/>
+        <origin xyz="${-base_lenght/4.0} ${(base_width/2.0)+(wheel_lenght/2.0)} 0" rpy="0 0 0"/>
+    </joint>
+
+    <joint name="base_caster_wheel_joint" type="fixed">
+        <parent link="base_link"/>
+        <child link="caster_wheel_link"/>
+        <origin xyz="${base_lenght/4.0} 0.0 ${-wheel_radius/2.0}" rpy="0.0 0.0 0.0"/>
+    </joint>
+
+    <joint name="base_lidar_joint" type="fixed">
+        <parent link="base_link"/>
+        <child link="lidar_link"/>
+        <origin xyz="0.0 0.0 ${base_hight + wheel_lenght/4.0}" rpy="0.0 0.0 0.0"/>
+    </joint>
+
+    <joint name="base_camera_link" type="fixed">
+        <parent link="base_link"/>
+        <child link="camera_link"/>
+        <origin xyz="${base_lenght/2.0 + 0.01/2.0} 0.0 ${base_hight/1.5}" rpy="0.0 -0.1 0.0"/>
+    </joint>
+    
+    
+
+</robot>

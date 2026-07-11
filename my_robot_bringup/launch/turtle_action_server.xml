@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<launch>
+
+    <node pkg="turtlesim" exec="turtlesim_node" name="huntinng_area"  />
+    <node pkg="move_robot_cpp" exec="move_robot_action_server" />
+    <node pkg="move_robot_cpp" exec="target_creator"           />
+
+
+</launch>

@@ -1,0 +1,7 @@
+<launch>
+
+    <node pkg="turtlesim" exec="turtlesim_node" name="huntinng_area"  />
+    <node pkg="turtul_cath_them_all" exec="turtule_controller" name="navigator"/>
+    <node pkg="turtul_cath_them_all" exec="create_target"/>
+
+</launch>
