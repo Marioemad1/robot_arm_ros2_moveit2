@@ -5,7 +5,11 @@ This repository contains a ROS 2 Humble robotic arm project integrated with Move
 The project supports arm motion planning using MoveIt 2 and allows the robot to move using named poses, joint targets, pose targets, Cartesian path commands, and gripper open/close commands.
 
 ---
+
+
 https://github.com/user-attachments/assets/9b86c948-561f-4ca5-b9cd-f214b6d07e40
+
+
 ---
 
 ## Features
